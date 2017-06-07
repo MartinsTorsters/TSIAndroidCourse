@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.martins.tsiapplication">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
-        android:icon="@drawable/autocollant-tete-maure-corse"
+        android:icon="@drawable/autocollant_tete_maure_corse"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/autocollant-tete-maure-corse"
+        android:roundIcon="@drawable/autocollant_tete_maure_corse"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity

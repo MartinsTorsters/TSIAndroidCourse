@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "384088829179",
+    "firebase_url": "https://tsiandroidcourse.firebaseio.com",
+    "project_id": "tsiandroidcourse",
+    "storage_bucket": "tsiandroidcourse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384088829179:android:9552e990fcb86985",
+        "android_client_info": {
+          "package_name": "com.example.martins.tsiapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "384088829179-1ih87ebarl1p8idmq4bd016vf1hqpdco.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgLTZLj0L-kMY2K5GPqlfiQ6-uhnx3EaY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
