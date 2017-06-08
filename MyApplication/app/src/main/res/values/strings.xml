@@ -30,4 +30,10 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="thumbnail">thumbnail</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string name="add_new_to_do_task">Add new to do task</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="adding_a_new_to_do_task">Adding a new to do task</string>
+    <string name="link_to_thumbnail">Link to thumbnail</string>
+    <string name="pick_date">Pick date</string>
 </resources>

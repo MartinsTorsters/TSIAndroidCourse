@@ -1,12 +1,11 @@
 package com.example.martins.tsiapplication;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,15 +13,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.martins.tsiapplication.activities.AddNewTaskActivity;
 import com.example.martins.tsiapplication.models.TaskDO;
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,37 +26,33 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            FirebaseApp.initializeApp(this);
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
-            final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
 
-            final ListView listview = (ListView) findViewById(R.id.to_do_list);
+        FirebaseApp.initializeApp(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-            database = FirebaseDatabase.getInstance();
+        final ListView listview = (ListView) findViewById(R.id.to_do_list);
 
-            final DatabaseReference taskRef = database.getReference("tasks");
-            final FirebaseListAdapter<TaskDO> myAdapter = new FirebaseListAdapter<TaskDO>(this, TaskDO.class, R.layout.activity_main, taskRef) {
-                @Override
-                protected void populateView(View v, TaskDO model, int position) {
-                    final TextView titleTextView = (TextView) findViewById(R.id.to_do_title);
-                    titleTextView.setText(model.getName());
-                    final TextView subtitleTextView = (TextView) findViewById(R.id.to_do_description);
-                    subtitleTextView.setText(model.getDetails());
-                    final TextView detailTextView = (TextView) findViewById(R.id.to_do_detail);
-                    detailTextView.setText(model.getUrl());
-                    final ImageView thumbnailImageView = (ImageView) findViewById(R.id.to_do_thumbnail);
-                    thumbnailImageView.setImageURI(Uri.parse(model.getUrl()));
-                }
-            };
-            listview.setAdapter(myAdapter);
-            addFloatingActionButton();
-        } catch (Exception e) {
-            Log.w("wtf", e);
-            System.out.print(e.getLocalizedMessage());
-        }
+        database = FirebaseDatabase.getInstance();
+
+        final DatabaseReference taskRef = database.getReference("tasks");
+        final FirebaseListAdapter<TaskDO> myAdapter = new FirebaseListAdapter<TaskDO>(this, TaskDO.class, R.layout.activity_main, taskRef) {
+            @Override
+            protected void populateView(View v, TaskDO model, int position) {
+                final TextView titleTextView = (TextView) findViewById(R.id.to_do_title);
+                titleTextView.setText(model.getName());
+                final TextView subtitleTextView = (TextView) findViewById(R.id.to_do_description);
+                subtitleTextView.setText(model.getDetails());
+                final TextView detailTextView = (TextView) findViewById(R.id.to_do_detail);
+                detailTextView.setText(model.getUrl());
+                final ImageView thumbnailImageView = (ImageView) findViewById(R.id.to_do_thumbnail);
+                thumbnailImageView.setImageURI(Uri.parse(model.getUrl()));
+            }
+        };
+        listview.setAdapter(myAdapter);
+        addFloatingActionButton();
     }
 
     private void addFloatingActionButton() {
@@ -68,9 +60,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                writeNewTask("jfb", "odnfig", "https://www.syndicatdermatos.org/wp-content/uploads/2015/08/autocollant-tete-maure-corse.jpg", "");
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(MainActivity.this, AddNewTaskActivity.class));
             }
         });
     }
@@ -100,16 +90,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void writeNewTask(String title, String details, String url, String label) {
-        String key = database.getReference().child("tasks").push().getKey();
-        final TaskDO task = new TaskDO(key, title, details, url);
-        Map<String, Object> postValues = task.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/tasks/" + key, postValues);
-
-        database.getReference().updateChildren(childUpdates);
     }
 }

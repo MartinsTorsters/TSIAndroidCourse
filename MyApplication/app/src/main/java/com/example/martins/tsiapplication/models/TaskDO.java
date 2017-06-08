@@ -114,7 +114,7 @@ public class TaskDO {
     public Map<String, Object> toMap() {
         final HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
-        result.put("title", name);
+        result.put("name", name);
         result.put("details", details);
         result.put("url", url);
         result.put("label", label);
