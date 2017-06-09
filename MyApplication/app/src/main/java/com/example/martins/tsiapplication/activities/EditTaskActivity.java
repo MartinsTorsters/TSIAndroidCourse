@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
@@ -15,54 +16,47 @@ import android.widget.TextView;
 
 import com.example.martins.tsiapplication.MainActivity;
 import com.example.martins.tsiapplication.R;
-import com.example.martins.tsiapplication.models.TaskDO;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
-public class AddNewTaskActivity extends Activity {
-    FirebaseDatabase database;
+public class EditTaskActivity extends Activity {
+
+    private FirebaseDatabase firebaseDatabase;
     private int mYear, mMonth, mDay;
-    private Date selectedDate;
-
-    private boolean isUpdate = false;
-    private String id;
-
+    final EditText titleEditView = (EditText) findViewById(R.id.add_title);
+    final EditText descriptionEditView = (EditText) findViewById(R.id.add_description);
+    final EditText urlEditView = (EditText) findViewById(R.id.add_thumbnail);
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        FirebaseApp.initializeApp(this);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_new_task);
-        if (!TextUtils.isEmpty(getIntent().getStringExtra("id"))) {
-            isUpdate = true;
-            id = setValues(getIntent());
-        }
-
-        database = FirebaseDatabase.getInstance();
-
+        setContentView(R.layout.edit_task);
+        final Intent intent = getIntent();
+        final String id = setValues(intent);
         final Button button = (Button) findViewById(R.id.add_new_task);
+        addButtonClickListener(id, button);
+    }
+
+    private String setValues(final Intent intent) {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        titleEditView.setText(intent.getStringExtra("title"));
+        descriptionEditView.setText(intent.getStringExtra("description"));
+        urlEditView.setText(intent.getStringExtra("url"));
+        return intent.getStringExtra("id");
+    }
+
+    private void addButtonClickListener(final String id, final Button button) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText titleEditView = (EditText) findViewById(R.id.add_title);
-                final EditText descriptionEditView = (EditText) findViewById(R.id.add_description);
-                final EditText urlEditView = (EditText) findViewById(R.id.add_thumbnail);
                 if (isInputValid(titleEditView, descriptionEditView, urlEditView)) {
-                    if (isUpdate) {
-                        writeNewTask(titleEditView.getText().toString(), descriptionEditView.getText().toString(),
-                                descriptionEditView.getText().toString(), urlEditView.getText().toString());
-                    } else {
-                        updateTask(id, descriptionEditView.getText().toString(),
-                                descriptionEditView.getText().toString(), urlEditView.getText().toString(), titleEditView.getText().toString());
-                    }
-                    startActivity(new Intent(AddNewTaskActivity.this, MainActivity.class));
+                    updateTask(titleEditView.getText().toString(), descriptionEditView.getText().toString(),
+                            descriptionEditView.getText().toString(), urlEditView.getText().toString(), id);
+                    startActivity(new Intent(EditTaskActivity.this, MainActivity.class));
                 } else {
                     Snackbar.make(v, "Fill in all Fields!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -72,43 +66,22 @@ public class AddNewTaskActivity extends Activity {
         });
     }
 
-    private void updateTask(final String id, final String details, final String url, final String label, final String title) {
+    private void updateTask(String id, String details, String url, String label, String title) {
         final HashMap<String, Object> result = new HashMap<>();
         result.put("name", title);
         result.put("details", details);
         result.put("url", url);
         result.put("label", label);
-        database.getReference("tasks").child(id).updateChildren(result);
+        firebaseDatabase.getReference("tasks").child(id).updateChildren(result);
     }
 
-    private String setValues(final Intent intent) {
-        final EditText titleEditView = (EditText) findViewById(R.id.add_title);
-        final EditText descriptionEditView = (EditText) findViewById(R.id.add_description);
-        final EditText urlEditView = (EditText) findViewById(R.id.add_thumbnail);
-        titleEditView.setText(intent.getStringExtra("title"));
-        descriptionEditView.setText(intent.getStringExtra("description"));
-        urlEditView.setText(intent.getStringExtra("url"));
-        return intent.getStringExtra("id");
-    }
 
     private boolean isInputValid(EditText titleEditView, EditText descriptionEditView, EditText urlEditView) {
         return !TextUtils.isEmpty(titleEditView.getText().toString()) || !TextUtils.isEmpty(descriptionEditView.getText().toString()) ||
                 !TextUtils.isEmpty(urlEditView.getText().toString());
     }
 
-    private void writeNewTask(String title, String details, String url, String label) {
-        String key = database.getReference().child("tasks").push().getKey();
-        final TaskDO task = new TaskDO(key, title, details, label);
-        task.setToDoDate(selectedDate);
-        Map<String, Object> postValues = task.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/tasks/" + key, postValues);
-
-        database.getReference().updateChildren(childUpdates);
-    }
-
-    public void showDatePickerDialog(View view) {
+    public void showDatePickerDialog1(View view) {
         final Button pickDate = (Button) findViewById(R.id.pick_date);
         final TextView textView = (TextView) findViewById(R.id.date);
 
@@ -123,7 +96,7 @@ public class AddNewTaskActivity extends Activity {
                 final String myFormat = "yyyy-MM-dd"; //In which you need put here
                 final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
                 textView.setText(sdf.format(myCalendar.getTime()));
-                selectedDate = myCalendar.getTime();
+
             }
 
         };
@@ -137,7 +110,7 @@ public class AddNewTaskActivity extends Activity {
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
                 // Launch Date Picker Dialog
-                DatePickerDialog dpd = new DatePickerDialog(AddNewTaskActivity.this,
+                DatePickerDialog dpd = new DatePickerDialog(EditTaskActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override

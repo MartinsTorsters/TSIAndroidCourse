@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.example.martins.tsiapplication.R;
 import com.example.martins.tsiapplication.Utils;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by Martins on 08/06/2017.
@@ -43,15 +44,4 @@ public class TaskHolder extends RecyclerView.ViewHolder{
         return thumbnailImageView;
     }
 
-    /* @Override
-    protected void populateView(final View view, final TaskDO model, final int position) {
-        final TextView titleTextView = (TextView) view.findViewById(R.id.to_do_title);
-        titleTextView.setText(model.getName());
-        final TextView subtitleTextView = (TextView) view.findViewById(R.id.to_do_description);
-        subtitleTextView.setText(model.getDetails());
-        final TextView detailTextView = (TextView) view.findViewById(R.id.to_do_detail);
-        detailTextView.setText(model.getUrl());
-        final ImageView thumbnailImageView = (ImageView) view.findViewById(R.id.to_do_thumbnail);
-        thumbnailImageView.setImageDrawable(Utils.LoadImageFromWebOperations(model.getUrl()));
-    }*/
 }

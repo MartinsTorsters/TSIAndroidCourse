@@ -36,4 +36,6 @@
     <string name="adding_a_new_to_do_task">Adding a new to do task</string>
     <string name="link_to_thumbnail">Link to thumbnail</string>
     <string name="pick_date">Pick date</string>
+    <string name="editing_task">Editing a task</string>
+    <string name="save_changes">Save changes</string>
 </resources>

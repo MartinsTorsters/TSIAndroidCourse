@@ -15,11 +15,11 @@
             android:paddingTop="5dip"
             android:paddingBottom="5dip">
 
-            <ImageView android:src="@drawable/filette_logo3"
+            <ImageView android:src="@drawable/visionaries_at_task_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="80dip"
-                android:contentDescription="@string/adding_a_new_to_do_task" />
+                android:contentDescription="@string/editing_task" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,16 +70,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pick_date"
-                android:background="@color/bg_main"
                 android:layout_marginStart="150dip"
-                android:onClick="showDatePickerDialog" />
+                android:onClick="showDatePickerDialog1" />
 
             <Button android:id="@+id/add_new_task"
                 android:layout_width="fill_parent"
-                android:background="@color/bg_main"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
-                android:text="@string/add_new_to_do_task"/>
+                android:background="@color/bg_main"
+                android:text="@string/save_changes"/>
 
         </LinearLayout>
     </RelativeLayout>
